@@ -27,7 +27,7 @@ const Footer = () => {
       </div>
       <div className='pb-5'>
         <hr />
-        <p className='text-center text-xs text-gray-400 pt-2'>Copyright © 2024 GreatStack - All Right Reserved.</p>
+        <p className='text-center text-xs text-gray-400 pt-2'>Copyright © 2024 Prescripto - All Right Reserved.</p>
       </div>
     </div>
   )
