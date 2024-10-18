@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     <div className='flex items-center justify-between py-3 border-b border-gray-400 mb-5 '>
-        <img onClick={()=>navigate('/')} src={assets.logo} alt=""  className='w-44 cursor-pointer'/>
+        <img onClick={()=>navigate('/')} src={assets.MyLogo} alt=""  className='w-44 cursor-pointer'/>
         <ul className=' hidden items-start md:flex gap-5 font-medium'>
             <NavLink to='/' >
                 <li py-1>HOME</li>
@@ -49,7 +49,7 @@ const Navbar = () => {
         {/*------   Mobile Menu       -----*/}
         <div className={`${showMenu ? 'fixed w-full': 'h-0 w-0'} md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}>
             <div className='flex items-center justify-between px-5 py-8'>
-                <img className='h-10' src={assets.logo} alt="" />
+                <img className='h-10' src={assets.MyLogo} alt="" />
                 <img className='w-10' onClick={()=>setShowMenu(false)} src={assets.cross_icon} alt="" />
             </div>
             <ul className='flex flex-col px-5 py-5 gap-8'>
