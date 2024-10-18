@@ -6,7 +6,9 @@ const Doctors = () => {
   const {speciality}=useParams();
   const navigate=useNavigate();
   const {doctors}=useContext(AppContext);
+
   const [filteredDoctors,setFilterdDoctors]=useState(doctors);
+  const[fliterButton,setFilterButton]=useState(false)
 
   const filterBySpeciality=()=>{
     const SpecialDoctors= doctors.filter(doctor=>doctor.speciality===speciality);
@@ -26,9 +28,10 @@ const Doctors = () => {
     <div className=''>
             <p>Browse through the doctors</p>
       <div className='flex flex-col sm:flex-row py-5 items-start'>
+        <button onClick={()=>setFilterButton(prev=>!prev)} className={`py-3 border border-gray-400 w-20 rounded-s ${fliterButton ? 'bg-primary text-white':'sm:hidden'}`}>Filter</button>
       {/*-- LEFT SIDE-*/}
-      <div className=''>
-        <ul className=' mr-4'>
+      <div >
+        <ul className={`mr-4  flex-col ${fliterButton ? 'flex':'hidden sm:flex'} `}>
           <li onClick={()=>speciality === 'General physician' ?navigate('/doctors'):navigate('/doctors/General physician')} className= {`border bg-white rounded-xl cursor-pointer hover:bg-blue-50  mt-5 py-2 px-6 ${speciality==="General physician"?"bg-indigo-100 text-black" :""}`}>General physician</li>
           <li onClick={()=>speciality === 'Gynecologist' ?navigate('/doctors'):navigate('/doctors/Gynecologist')} className= {`border bg-white rounded-xl cursor-pointer hover:bg-blue-50  mt-5 py-2 px-6 ${speciality==="Gynecologist"?"bg-indigo-100 text-black" :""}`}>Gynecologist</li>
           <li onClick={()=>speciality === 'Dermatologist' ?navigate('/doctors'):navigate('/doctors/Dermatologist')} className= {`border bg-white rounded-xl cursor-pointer hover:bg-blue-50  mt-5 py-2 px-6 ${speciality==="Dermatologist"?"bg-indigo-100 text-black" :""}`}>Dermatologist</li>
