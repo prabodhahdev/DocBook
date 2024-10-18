@@ -16,7 +16,7 @@ const MyProfile = () => {
     dob:"2000-09-04"
   })
 
-  const [isEdit , setIsEdit]=useState(true)
+  const [isEdit , setIsEdit]=useState(false)
 
   return (
     <div className='flex flex-col text-sm text-gray-900 max-w-lg  pb-10'>
