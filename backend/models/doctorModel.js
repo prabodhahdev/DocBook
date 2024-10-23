@@ -36,7 +36,7 @@ const doctorSchema=new mongoose.Schema({
     },
     available:{
         type:Boolean,
-        required:true
+        default:true
     },
     fees:{
         type:Number,
@@ -59,4 +59,4 @@ const doctorSchema=new mongoose.Schema({
 },{minimize:false}) // to store empty object in any data (if we add true we cannot create empty object)
 
 const Doctor=mongoose.model('Doctor',doctorSchema);
-module.exports=Doctor
+export default Doctor
