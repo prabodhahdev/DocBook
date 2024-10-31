@@ -1,10 +1,35 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { AdminContext } from '../context/AdminContext'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Login = () => {
     const [state ,setState]=useState('Admin')
+    const [email,setEmail] = useState('')
+    const [password,setPasssword] = useState('')
+    const {setAtoken} = useContext(AdminContext)
 
-    const formSubmit = async (req,res) =>{
+    const formSubmit = async (e) =>{
         e.preventDefault()
+        try {
+          if(state === 'Admin'){
+            const {data} = await axios.post('http://localhost:8000/api/admin/login',{email,password})
+            if(data.success){
+              console.log(data.token)
+              localStorage.setItem('aToken', data.token);
+              setAtoken(data.token)
+              toast.success('Loggin is Successfull')
+            }else{
+              toast.error(data.msg)
+            }
+
+          }else{
+
+          }
+
+        } catch (error) {
+          
+        }
         
     }
 
@@ -20,9 +45,11 @@ const Login = () => {
            
            <p className='text-sm text-gray-500'>Email</p>
            <input
-           type="emai" 
+           type="email" 
            required  
+           value={email}
            className='border rounded-sm w-full my-1 py-1'
+           onChange={(e)=>setEmail(e.target.value)}
            />
            
            
@@ -30,7 +57,9 @@ const Login = () => {
            <input 
            type="password" 
            required  
+           value={password}
            className='border rounded-sm w-full my-1 py-1'
+           onChange={(e)=>setPasssword(e.target.value)}
            />
            <button className='my-3 bg-primary p-2 text-white rounded-lg'>Login</button>
            {

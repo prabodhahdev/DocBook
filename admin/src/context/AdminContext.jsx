@@ -1,10 +1,14 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
 export const AdminContext = createContext();
 
-const AdminContextProvider = (props) =>{
-    const value ={
 
+const AdminContextProvider = (props) =>{
+    const [aToken , setAtoken] = useState(localStorage.getItem('aToken')?localStorage.getItem('aToken'):'')
+
+    const value ={
+        aToken,
+        setAtoken 
     }
     
     return (
