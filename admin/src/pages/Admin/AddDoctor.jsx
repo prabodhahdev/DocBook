@@ -56,6 +56,7 @@ const AddDoctor = () => {
 
         setDocImg(false)
         setPassword("")
+        setName("")
         setEmail("")
         setAddress1("")
         setAddress2("")
