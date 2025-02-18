@@ -1,6 +1,8 @@
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 import User from '../models/userModel.js'
+import Doctor from '../models/doctorModel.js'
+import AppointmentModel from '../models/appointmentModel.js'
 import jwt from 'jsonwebtoken'
 import {v2 as cloudinary} from 'cloudinary'
 
@@ -131,5 +133,65 @@ const updateProfile = async (req,res) =>{
 
 }
 
+// API to book appointment
 
-export {registerUser , loginUser , getProfile , updateProfile}
+const bookAppointment = async (req ,res) =>{
+    try {
+
+        const  {userId , docId , slotDate , slotTime} = req.body
+
+        const docData = await Doctor.findById(docId).select('-password')
+
+        if (!docData.available) {
+            return res.json({success:false,msg:"Doctor is not Available"})
+        }
+
+        let booked_slots = docData.booked_slots
+
+        // checking for slot availability
+        if(booked_slots[slotDate]){
+            if (booked_slots[slotDate].includes(slotTime)) {
+                return res.json({success:false,msg:"Slot is not Available"})
+            } else{
+                booked_slots[slotDate].push(slotTime)
+            }
+        }else {
+            booked_slots[slotDate] = []
+            booked_slots[slotDate].push(slotTime)
+        }
+
+        const userData = await User.findById(userId).select('-password')
+
+        delete docData.booked_slots
+
+        const appointmentData = {
+            userId,
+            docId,
+            userData,
+            docData,
+            amount : docData.fees,
+            slotTime,
+            slotDate,
+            date: Date.now()
+
+        }
+
+        const newAppointment = new AppointmentModel(appointmentData)
+
+        await newAppointment.save()
+        
+        //save newslots data in doctors data
+
+        await Doctor.findByIdAndUpdate(docId,{booked_slots})
+
+        res.json({success:true,msg:"Appointment is Booked"})
+
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,msg:error.msg})
+    }
+} 
+
+
+
+export {registerUser , loginUser , getProfile , updateProfile ,bookAppointment}
