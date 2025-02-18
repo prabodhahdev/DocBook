@@ -2,7 +2,7 @@ import validator from 'validator'
 import bcrypt from 'bcrypt'
 import User from '../models/userModel.js'
 import jwt from 'jsonwebtoken'
-import {V2 as cloudinary} from 'cloudinary'
+import {v2 as cloudinary} from 'cloudinary'
 
 // API for registering user
 
@@ -105,10 +105,10 @@ const getProfile  = async (req,res) =>{
 const updateProfile = async (req,res) =>{
    try {
     
-    const {userId, name , phonr, address, dob , gender} = req.body
-    const imageFile = req.imageFile
+    const {userId, name , phone, address, dob , gender} = req.body
+    const imageFile = req.file
 
-    if (!name || !phonr || !address  || !dob || !gender) {
+    if (!name || !phone || !address  || !dob || !gender) {
         return res.json({success:false,msg:"Data Missing"})
         
     }
@@ -117,7 +117,7 @@ const updateProfile = async (req,res) =>{
 
     if (imageFile) {
         //upload image to cloudinary
-        const imageUpload = await cloudinary.uploader.upload(imageFile.path,{resourse_type})
+        const imageUpload = await cloudinary.uploader.upload(imageFile.path,{ resource_type: 'image' })
         const imageURL = imageUpload.secure_url
 
         await User.findByIdAndUpdate(userId,{image:imageURL})
