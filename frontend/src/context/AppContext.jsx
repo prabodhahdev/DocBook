@@ -7,6 +7,7 @@ export const AppContext = createContext();
 const AppContextProvider = (props) => {
     const currencySymbol = '$';
     const [doctors, setDoctors] = useState([]);
+    const [token ,setToken] = useState(localStorage.getItem('token')? localStorage.getItem('token') : false)
 
     const getDoctorsData = async () => {
         try {
@@ -29,7 +30,8 @@ const AppContextProvider = (props) => {
     const value = {
         doctors,
         setDoctors, // ✅ Now other components can update doctors
-        currencySymbol
+        currencySymbol,
+        token,setToken
     };
 
     return (
