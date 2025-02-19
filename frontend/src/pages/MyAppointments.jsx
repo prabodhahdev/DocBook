@@ -4,7 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const MyAppointments = () => {
-  const { token } = useContext(AppContext);
+  const { token , getDoctorsData } = useContext(AppContext);
   const [appointments, setAppointments] = useState([]);
   const months = ["","Jan" ,"Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 
@@ -17,7 +17,8 @@ const MyAppointments = () => {
       const { data } = await axios.get('http://localhost:8000/api/user/appointment-lists', { headers: { token } });
       
       if (data.success) {
-        setAppointments(data.appointment); // ✅ Corrected property name
+        setAppointments(data.appointment.reverse());
+ 
         console.log(data.appointment);
       }
     } catch (error) {
@@ -26,9 +27,31 @@ const MyAppointments = () => {
     }
   };
 
+
+  // cancel appointmnt
+
+  const cancelAppointment = async (appointmentId) => {
+    try {
+      
+      const {data} = await axios.post('http://localhost:8000/api/user/cancel-appointment',{appointmentId},{headers:{token}})
+      if (data.success) {
+        toast.success(data.msg)
+        getUserAppointments()
+        getDoctorsData()
+      }else{
+        toast.error(data.msg)
+      }
+      
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.msg || "Something went wrong");
+    }
+  }
+
   useEffect(() => {
     if (token) {
       getUserAppointments();
+      
     }
   }, [token]);
 
@@ -51,12 +74,23 @@ const MyAppointments = () => {
                 <p className='pt-2'><span className='text-zinc-500 font-bold'>Date & Time:</span> {slotDateFormat(item.slotDate)} | {item.slotTime}</p>
               </div>
               <div className='flex flex-col gap-3 justify-end'>
-                <button className='text-black border border-gray text-sm py-2 sm:min-w-[48px] hover:bg-primary hover:text-white'>
-                  Pay Online
-                </button>
-                <button className='text-black border border-gray text-sm py-2 px-10 hover:bg-red-600 hover:text-white'>
+                { !item.canceled && 
+                 <button className='text-black border border-gray text-sm py-2 sm:min-w-[48px] hover:bg-primary hover:text-white'>
+                 Pay Online
+               </button>
+                }
+               
+                {!item.canceled && 
+
+                  <button onClick={()=> cancelAppointment(item._id)} className='text-black border border-gray text-sm py-2 px-10 hover:bg-red-600 hover:text-white'>
                   Cancel Appointment
-                </button>
+                 </button>
+
+                }
+                <div>
+                  {item.canceled && <button className='sm:min-w-48 py-2 border border-x-red-500 rounded text-red-500'>Appointment cancelled</button>}
+                </div>
+                
               </div>
             </div>
           ))

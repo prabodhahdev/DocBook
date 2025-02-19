@@ -210,5 +210,40 @@ const appointmentList = async (req,res) =>{
     }
 }
 
+// cancel the appointments by user
 
-export {registerUser , loginUser , getProfile , updateProfile ,bookAppointment ,appointmentList }
+const cancelAppointments = async (req,res) => {
+    try {
+
+        const {userId , appointmentId} = req.body
+
+        const appointmentData = await AppointmentModel.findById(appointmentId)
+
+        // verify appointment user
+        if (appointmentData.userId !== userId) {
+            return res.json({success:false,msg:"Unauthorized Access"})
+        }
+
+        await AppointmentModel.findByIdAndUpdate(appointmentId,{canceled:true})
+
+        //releasing the doctor slot
+
+        const {docId,slotDate,slotTime} = appointmentData
+
+        const docData = await Doctor.findById(docId)
+
+        let booked_slots = docData.booked_slots
+
+        booked_slots[slotDate] = booked_slots[slotDate].filter(e => e !== slotTime)
+
+        await Doctor.findByIdAndUpdate(docId,{booked_slots})
+        
+        res.json({success:true, msg:"Appointment is cancelled"})
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,msg:error.msg})
+    }
+}
+
+
+export {registerUser , loginUser , getProfile , updateProfile ,bookAppointment ,appointmentList ,cancelAppointments }
