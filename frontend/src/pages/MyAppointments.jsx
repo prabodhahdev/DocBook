@@ -1,38 +1,71 @@
-import React, { useContext } from 'react'
-import {AppContext} from '../context/AppContext'
+import React, { useContext, useEffect, useState } from 'react';
+import { AppContext } from '../context/AppContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const MyAppointments = () => {
-  const {doctors}= useContext(AppContext)
+  const { token } = useContext(AppContext);
+  const [appointments, setAppointments] = useState([]);
+  const months = ["","Jan" ,"Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+
+  const slotDateFormat = (slotDate) =>{
+    const dateAttay =slotDate.split('_')
+    return dateAttay[0]+" " +months[Number(dateAttay[1])] + " " +dateAttay[2]
+  }
+  const getUserAppointments = async () => {
+    try {
+      const { data } = await axios.get('http://localhost:8000/api/user/appointment-lists', { headers: { token } });
+      
+      if (data.success) {
+        setAppointments(data.appointment); // ✅ Corrected property name
+        console.log(data.appointment);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.msg || "Something went wrong");
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      getUserAppointments();
+    }
+  }, [token]);
 
   return (
     <div>
       <p className='pb-3 mt-12 text-gray-500 text-xl font-bold border-b'>My Appointments</p>
-      <div className=''>
-        {doctors.map((item,index)=>(
-          <div key={index} className='grid gap-4 grid-cols-[1fr_2fr] sm:flex sm:gap-6  border-b items-end p-2'>
-            <div>
-            <img className='w-32 bg-indigo-50' src={item.image} alt="" />
-            </div>            
-            <div className='flex-1 text-zinc-500 text-sm'>
-              <p className='text-zinc-700 text-lg font-bold'>{item.name}</p>
-              <p>{item.speciality}</p>
-              <p className='pt-2 text-zinc-500 font-bold'>Address:</p>
-              <p>{item.address.line1}</p>
-              <p>{item.address.line2}</p>
-              <p className='pt-2'><span className=' text-zinc-500 font-bold'>Date & Time:</span>  25, July, 2024 |  8:30 PM</p>
+      <div>
+        {appointments.length > 0 ? (
+          appointments.map((item, index) => (
+            <div key={index} className='grid gap-4 grid-cols-[1fr_2fr] sm:flex sm:gap-6 border-b items-end p-2'>
+              <div>
+                <img className='w-32 bg-indigo-50' src={item?.docData?.image || 'fallback-image.jpg'} alt="Doctor" />
+              </div>            
+              <div className='flex-1 text-zinc-500 text-sm'>
+                <p className='text-zinc-700 text-lg font-bold'>{item?.docData?.name || 'Unknown Doctor'}</p>
+                <p>{item?.docData?.speciality || 'N/A'}</p>
+                <p className='pt-2 text-zinc-500 font-bold'>Address:</p>
+                <p>{item?.docData?.address?.line1 || 'No Address'}</p>
+                <p>{item?.docData?.address?.line2 || ''}</p>
+                <p className='pt-2'><span className='text-zinc-500 font-bold'>Date & Time:</span> {slotDateFormat(item.slotDate)} | {item.slotTime}</p>
+              </div>
+              <div className='flex flex-col gap-3 justify-end'>
+                <button className='text-black border border-gray text-sm py-2 sm:min-w-[48px] hover:bg-primary hover:text-white'>
+                  Pay Online
+                </button>
+                <button className='text-black border border-gray text-sm py-2 px-10 hover:bg-red-600 hover:text-white'>
+                  Cancel Appointment
+                </button>
+              </div>
             </div>
-            <div></div>
-            <div className='flex flex-col gap-3 justify-end' >
-              <button className=' text-black border border-gray  text-sm py-2 sm:min-w-[48px] hover:bg-primary hover:text-white'>Pay Online</button>
-              <button className=' text-black border border-gray text-sm py-2 px-10 hover:bg-red-600 hover:text-white'>Cansle Appointment</button>
-            </div>
-          </div>
-        ))}
-
+          ))
+        ) : (
+          <p className='text-center text-gray-500 mt-4'>No Appointments Found</p>
+        )}
       </div>
-      
     </div>
-  )
-}
+  );
+};
 
-export default MyAppointments
+export default MyAppointments;

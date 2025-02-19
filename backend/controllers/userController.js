@@ -5,6 +5,7 @@ import Doctor from '../models/doctorModel.js'
 import AppointmentModel from '../models/appointmentModel.js'
 import jwt from 'jsonwebtoken'
 import {v2 as cloudinary} from 'cloudinary'
+import appointmentModel from '../models/appointmentModel.js'
 
 // API for registering user
 
@@ -193,5 +194,21 @@ const bookAppointment = async (req ,res) =>{
 } 
 
 
+// API to get appointmnet
+const appointmentList = async (req,res) =>{
+    try {
 
-export {registerUser , loginUser , getProfile , updateProfile ,bookAppointment}
+       const {userId}= req.body
+       const appointment = await AppointmentModel.find({userId})
+
+       res.json({success:true,appointment})
+
+
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,msg:error.msg})
+    }
+}
+
+
+export {registerUser , loginUser , getProfile , updateProfile ,bookAppointment ,appointmentList }
