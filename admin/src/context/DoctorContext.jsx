@@ -1,15 +1,41 @@
 import { useState } from "react";
 import { createContext } from "react";
+import axios from 'axios'
+import {toast} from 'react-toastify'
 
 export const  DoctorContext = createContext();
 
 const DoctorContextProvider = (props) =>{
 
-    const [dToken , setDtoken] = useState(localStorage.getItem('aToken')?localStorage.getItem('aToken'):'')
+    const [dToken , setDtoken] = useState(localStorage.getItem('dToken')?localStorage.getItem('dToken'):'')
+    const [appointments , setAppointmnets] = useState([])
+
+    const getAppointments = async () =>{
+        try {
+
+            const {data} = await axios.get('http://localhost:8000/api/doctor/appointments',{headers:{dToken}})
+            if (data.succuss) {
+                setAppointmnets(data.appointments.reverse())
+                console.log(data.appointments);
+                
+            }else{
+                toast.error(data.msg)
+            }
+            
+        } catch (error) {
+            console.log(error);
+            toast.error(error.msg)
+            
+        }
+    }
+
 
     const value = {
         dToken,
-        setDtoken
+        setDtoken,
+        appointments,
+        setAppointmnets,
+        getAppointments
     }
 
    
