@@ -8,14 +8,14 @@ export const  DoctorContext = createContext();
 const DoctorContextProvider = (props) =>{
 
     const [dToken , setDtoken] = useState(localStorage.getItem('dToken')?localStorage.getItem('dToken'):'')
-    const [appointments , setAppointmnets] = useState([])
+    const [appointments , setAppointments] = useState([])
 
     const getAppointments = async () =>{
         try {
 
             const {data} = await axios.get('http://localhost:8000/api/doctor/appointments',{headers:{dToken}})
-            if (data.succuss) {
-                setAppointmnets(data.appointments.reverse())
+            if (data.success) {
+                setAppointments(data.appointments)
                 console.log(data.appointments);
                 
             }else{
@@ -34,7 +34,7 @@ const DoctorContextProvider = (props) =>{
         dToken,
         setDtoken,
         appointments,
-        setAppointmnets,
+        setAppointments,
         getAppointments
     }
 
