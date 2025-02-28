@@ -4,7 +4,7 @@ import { AppContext } from "../../context/AppContext";
 import { assets } from "../../assets/assets";
 
 const DoctorAppointments = () => {
-  const { dToken, appointments, getAppointments } = useContext(DoctorContext);
+  const { dToken, appointments, getAppointments ,completeAppointment,cancelAppointment} = useContext(DoctorContext);
   const { calculateAge, slotDateFormat, currency } = useContext(AppContext);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const DoctorAppointments = () => {
         </div>
 
         {/* 🟢 Mapping Appointments Separately */}
-        {appointments.map((item, index) => (
+        {appointments.reverse().map((item, index) => (
           <div
             key={index}
             className="grid grid-cols-[0.5fr_2fr_1fr_1fr_3fr_1fr_1fr] gap-1 items-center text-gray-500 py-3 px-6 border-b"
@@ -54,10 +54,17 @@ const DoctorAppointments = () => {
               {currency}
               {item.amount}
             </p>
-            <div className="flex gap-2">
-              <img src={assets.cancel_icon} alt="Cancel" className="w-10 h-10 cursor-pointer" />
-              <img src={assets.tick_icon} alt="Approve" className="w-10 h-10 cursor-pointer" />
-            </div>
+            {
+              item.canceled ?
+              <p className="text-red-500">Canceled</p>
+              : item.isCompleted 
+                ? <p className="text-green-500">Completed</p>
+                : <div className="flex gap-2">
+                <img onClick={()=>{cancelAppointment(item._id)}} src={assets.cancel_icon} alt="Cancel" className="w-10 h-10 cursor-pointer" />
+                <img onClick={()=>{completeAppointment(item._id)}} src={assets.tick_icon} alt="Approve" className="w-10 h-10 cursor-pointer" />
+              </div>
+            }
+            
           </div>
         ))}
       </div>
