@@ -117,4 +117,43 @@ const appointmentCancel = async (req,res) => {
 }
 
 
-export {changeAvailability, doctorList ,loginDoctor , appointmentsDoctor ,appointmentCancel ,appointmentComplete}
+// API to get dashboard data for doctor panel
+const doctorDashboard = async (req, res) => {
+    try {
+        const { docId } = req.body;
+
+        // Fetch appointments for the doctor
+        const appointments = await appointmentsModel.find({ docId });
+
+        // Calculate earnings
+        let earnings = 0;
+        appointments.forEach((item) => {
+            if (item.isCompleted || item.payments) {  // Assuming 'payments' is the correct field
+                earnings += item.amount;
+            }
+        });
+
+        // Get unique patient count
+        let patients = new Set();
+        appointments.forEach((item) => {
+            patients.add(item.userId);
+        });
+
+        // Prepare dashboard data
+        const dashData = {
+            earnings,
+            appointments: appointments.length,
+            patients: patients.size, // Use .size for Set
+            latestAppointments: appointments.slice().reverse().slice(0, 5) // Avoid modifying original array
+        };
+
+        res.json({ success: true, dashData });
+
+    } catch (error) {
+        console.error(error);
+        res.json({ success: false, msg: error.message || "An error occurred" });
+    }
+};
+
+
+export {changeAvailability, doctorList ,loginDoctor , appointmentsDoctor ,appointmentCancel ,appointmentComplete , doctorDashboard}
