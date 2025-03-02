@@ -14,9 +14,13 @@ const TopDoctors = () => {
             <div  key={index} onClick={()=>navigate(`/appointments/${item._id}`)} className='border border-blue-100 overflow-hidden rounded-xl cursor-pointer hover:translate-y-[-10px] transition-all duration-500'>
                 <img className='bg-blue-50' src={item.image} alt="" />
                 <div className='p-4'>
-                    <div className='flex items-center gap-2 '>
-                        <p className='w-1.5 h-1.5 rounded-full bg-green-500'></p><p className='text-sm text-green-500'>Available</p>
-                    </div>
+                <div className='flex items-center gap-2'>
+  <p className={`w-1.5 h-1.5 ${item.available ? 'bg-green-500' : 'bg-red-500'} rounded-full`}></p>
+  <p className={`text-sm ${item.available ? 'text-green-500' : 'text-red-500'}`}>
+    {item.available ? 'Available' : 'Not Available'}
+  </p>
+</div>
+
                     <p className='text-gray-900 font-medium'>{item.name}</p>
                     <p className='text-gray-500 text-sm'>{item.speciality}</p>
                 </div>

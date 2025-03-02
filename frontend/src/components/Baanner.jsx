@@ -1,6 +1,8 @@
 import React from 'react'
 import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
+import Banner from '../assets/b.png'
+
 
 const Baanner = () => {
     const navigate= useNavigate();
@@ -11,7 +13,7 @@ const Baanner = () => {
         With 100+ Trusted Doctors</p>
         <button onClick={()=>{navigate('/login');scrollTo(0,0);}} className='mt-5 py-2 px-6 bg-white rounded-full text-sm  text-gray-700 hover:scale-105 transition-all'>Create Account</button>
       </div>
-      <div className='hidden md:block md:w-1/2 relative lg:w-[370px] '><img className='w-full absolute bottom-0 right-0 max-w-md' src={assets.appointment_img} alt="" /></div>
+      <div className='hidden md:block  md:w-1/2 relative lg:w-[650px] '><img className='w-full absolute bottom-5 right-0 max-w-md' src={Banner} alt="" /></div>
     </div>
   )
 }

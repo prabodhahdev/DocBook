@@ -49,8 +49,10 @@ const Doctors = () => {
               <img className='bg-blue-50' src={item.image} alt="" />
               <div className='p-4'>
                   <div className='flex items-center gap-2 '>
-                      <p className='w-1.5 h-1.5 rounded-full bg-green-500'></p><p className='text-sm text-green-500'>Available</p>
-                  </div>
+                  <p className={`w-2 h-2 rounded-full ${item.available ? 'bg-green-500' : 'bg-red-500'}`}></p>
+          <p className={`text-sm font-medium ${item.available ? 'text-green-500' : 'text-red-500'}`}>
+            {item.available ? 'Available' : 'Not Available'}
+          </p>                  </div>
                   <p className='text-gray-900 font-medium'>{item.name}</p>
                   <p className='text-gray-500 text-sm'>{item.speciality}</p>
               </div>

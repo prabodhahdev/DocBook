@@ -19,7 +19,7 @@ const Navbar = () => {
         <img onClick={()=>navigate('/')} src={assets.MyLogo} alt=""  className='w-44 cursor-pointer'/>
         <ul className=' hidden items-start md:flex gap-5 font-medium'>
             <NavLink to='/' >
-                <li className='py-1'>HOME</li>
+                <li >HOME</li>
                 <hr className='border-none outline-none bg-primary m-auto w-3/5 h-0.5 hidden'/>
             </NavLink>
             <NavLink  to='/doctors' >

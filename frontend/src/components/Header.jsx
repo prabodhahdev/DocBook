@@ -1,5 +1,7 @@
 import React from 'react'
 import { assets } from '../assets/assets'
+import GroupDoctors from '../assets/d.png'
+
 
 const Header = () => {
   return (
@@ -25,7 +27,7 @@ const Header = () => {
 
       {/*------Right Side--------- */}
       <div className='md:w-1/2 relative'>
-        <img src={assets.header_img} alt="" className='w-full md:absolute bottom-0 h-auto rounded-xl' />
+        <img src={GroupDoctors} alt="" className='w-full   md:absolute bottom-0 h-auto rounded-xl' />
       </div>
     </div>
   )
