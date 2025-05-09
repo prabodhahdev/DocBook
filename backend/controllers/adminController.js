@@ -6,6 +6,7 @@ import User from '../models/userModel.js'
 import jwt from 'jsonwebtoken'
 import appointmentModel from '../models/appointmentModel.js'
 
+/*
 const addDoctor = async (req,res)=>{
     try {
         const {name, email,password,speciality,degree,experience,about,fees,address}= req.body;
@@ -59,8 +60,72 @@ const addDoctor = async (req,res)=>{
         res.json({success:false,msg:error.msg})
     }
 }
+*/
+const addDoctor = async (req, res) => {
+  try {
+    const { name, email, password, speciality, degree, experience, about, fees, address } = req.body;
+    const image = req.file;
+
+    // Check if the user is the dummy account
+    const { email: userEmail } = req.user;  // Assuming the user's email is passed as a JWT payload (use jwt.verify to decode token)
+
+    if (userEmail === process.env.DUMMY_EMAIL) {
+      return res.json({
+        success: false,
+        msg: 'Action disabled in demo mode. Contact admin for full access.'
+      });
+    }
+    
+
+    // Validate other inputs
+    if (!name || !email || !password || !speciality || !degree || !experience || !about || !fees || !address) {
+      return res.json({ success: false, msg: 'Missing Details' });
+    }
+
+    // Validate email format
+    if (!validator.isEmail(email)) {
+      return res.json({ success: false, msg: 'Enter a valid email address' });
+    }
+
+    // Validate strong password
+    if (password.length < 8) {
+      return res.json({ success: false, msg: 'Enter a strong password' });
+    }
+
+    // Hash doctor password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Upload image to Cloudinary
+    const imageUpload = await cloudinary.uploader.upload(image.path, { resource_type: 'image' });
+    const imageUrl = imageUpload.secure_url;
+
+    const doctorData = {
+      name,
+      email,
+      image: imageUrl,
+      password: hashedPassword,
+      speciality,
+      degree,
+      about,
+      experience,
+      fees,
+      address: JSON.parse(address),
+      date: Date.now(),
+    };
+
+    const newDoctor = new Doctor(doctorData);
+    await newDoctor.save();
+
+    res.json({ success: true, msg: 'Doctor Added' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, msg: error.msg || 'Server Error' });
+  }
+};
 
 //Admin Login
+/*
 const AdminLogin = async (req,res) =>{
     try {
         const {email, password} = req.body
@@ -78,6 +143,28 @@ const AdminLogin = async (req,res) =>{
     }
 }
 
+*/
+
+
+// AdminLogin.js
+const AdminLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (
+      (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) ||
+      (email === process.env.DUMMY_EMAIL && password === process.env.DUMMY_PASSWORD)
+    ) {
+      const token = jwt.sign({ email, password }, process.env.JWT_SECRET);
+      return res.json({ success: true, token });
+    }
+
+    res.json({ success: false, msg: "Invalid Credentials" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, msg: "Server Error" });
+  }
+};
 
 //get all doctors
 const allDoctors = async (req,res) =>{

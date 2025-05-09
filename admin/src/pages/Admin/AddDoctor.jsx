@@ -20,11 +20,16 @@ const AddDoctor = () => {
   const [address2,setAddress2]=useState("")
 
 
-  const {backendUrl, aToken} = useContext(AdminContext)
+  const {backendUrl, userRole, aToken} = useContext(AdminContext)
 
 
   const onSubmitHandler = async (event) =>{
     event.preventDefault()
+     if (userRole === 'dummy') {
+      alert("Action disabled in demo mode. Contact admin for full access.");
+      return;
+    }
+
 
     try {
       if(!docImg){
@@ -164,7 +169,13 @@ const AddDoctor = () => {
               <p className='mt-4 mb-2'>About Doctor</p>
               <textarea onChange={(e)=>setAbout(e.target.value)} value={about} className='w-full px-4 pt-2 border rounded' type="text"  placeholder='write about doctor' rows={5} required/>
             </div>
-          <button type='submit' className='bg-primary px-10 py-3 mt-4 text-white rounded-full '>Add Doctor</button>
+          <button type='submit' className='bg-primary px-10 py-3 mt-4 text-white rounded-full '
+          disabled={userRole === 'dummy'}
+          style={{
+            cursor: userRole === 'dummy' ? 'not-allowed' : 'pointer',
+            opacity: userRole === 'dummy' ? 0.6 : 1
+          }}
+          >Add Doctor</button>
           </div>
         </form>
        
