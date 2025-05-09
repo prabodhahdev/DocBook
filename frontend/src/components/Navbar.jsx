@@ -39,7 +39,9 @@ const Navbar = () => {
        {
             token
             ?<div className='flex items-center gap-2 cursor-pointer group relative'>
-                <img src={userData.image} alt=""  className='w-8 h-8 rounded-full object-fit- object-cover'/>
+{userData?.image && (
+  <img src={userData.image} alt="User" className="w-8 h-8 rounded-full object-fit- object-cover" />
+)}
                 <img src={assets.dropdown_icon} alt=""  className='w-2.5'/>
                 <div className='absolute top-0 right-0 pt-14 hidden text-gray-600  text-base z-20 group-hover:block'>
                     <div className='min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4'>
