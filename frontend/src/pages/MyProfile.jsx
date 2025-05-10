@@ -34,7 +34,7 @@ for (let pair of formData.entries()) {
   console.log(pair[0] + ": " + pair[1]);
 }
   
-      const { data } = await axios.post("http://localhost:8000/api/user/update-profile", formData, {
+      const { data } = await axios.post("https://docbook-backend-cjvu.onrender.com/api/user/update-profile", formData, {
         headers: { token }
       });
   

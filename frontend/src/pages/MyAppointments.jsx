@@ -14,7 +14,7 @@ const MyAppointments = () => {
   }
   const getUserAppointments = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8000/api/user/appointment-lists', { headers: { token } });
+      const { data } = await axios.get('https://docbook-backend-cjvu.onrender.com/api/user/appointment-lists', { headers: { token } });
       
       if (data.success) {
         setAppointments(data.appointment.reverse());
@@ -33,7 +33,7 @@ const MyAppointments = () => {
   const cancelAppointment = async (appointmentId) => {
     try {
       
-      const {data} = await axios.post('http://localhost:8000/api/user/cancel-appointment',{appointmentId},{headers:{token}})
+      const {data} = await axios.post('https://docbook-backend-cjvu.onrender.com/api/user/cancel-appointment',{appointmentId},{headers:{token}})
       if (data.success) {
         toast.success(data.msg)
         getUserAppointments()

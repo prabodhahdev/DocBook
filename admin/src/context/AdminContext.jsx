@@ -14,7 +14,7 @@ const AdminContextProvider = (props) =>{
     const getAllDoctors = async () =>{
         try {
             
-            const {data} = await axios.get('http://localhost:8000/api/admin/alldoctors',{headers:{aToken}})
+            const {data} = await axios.get('https://docbook-backend-cjvu.onrender.com/api/admin/alldoctors',{headers:{aToken}})
             
             if(data.success){
                 setDoctors(data.doctors)
@@ -30,7 +30,7 @@ const AdminContextProvider = (props) =>{
 
     const changeAvailability = async (docId) =>{
         try {
-            const {data} = await axios.post('http://localhost:8000/api/admin/change-availability',{docId},{headers:{aToken}})
+            const {data} = await axios.post('https://docbook-backend-cjvu.onrender.com/api/admin/change-availability',{docId},{headers:{aToken}})
             
             if(data.success){
                 toast.success(data.msg)
@@ -47,7 +47,7 @@ const AdminContextProvider = (props) =>{
     const getAllAppointments = async () => {
         try {
             
-            const { data } = await axios.get('http://localhost:8000/api/admin/get-adminappointments',{headers:{aToken}})
+            const { data } = await axios.get('https://docbook-backend-cjvu.onrender.com/api/admin/get-adminappointments',{headers:{aToken}})
             if(data.success){
                 setAppointments(data.appointments)
                 console.log(data.appointments);
@@ -63,7 +63,7 @@ const AdminContextProvider = (props) =>{
     const cancelAppointments = async (appointmentId ) => {
         try {
             
-            const { data } = await axios.post('http://localhost:8000/api/admin/cancel-appointment',{appointmentId},{headers:{aToken}})
+            const { data } = await axios.post('https://docbook-backend-cjvu.onrender.com/api/admin/cancel-appointment',{appointmentId},{headers:{aToken}})
             if(data.success){
                 toast.success(data.msg)
                 getAllAppointments()
@@ -84,7 +84,7 @@ const AdminContextProvider = (props) =>{
     const getDashData = async () => {
         try {
 
-            const { data } = await axios.get('http://localhost:8000/api/admin/dashboard',{headers:{aToken}})
+            const { data } = await axios.get('https://docbook-backend-cjvu.onrender.com/api/admin/dashboard',{headers:{aToken}})
             
             if(data.success){
                 setDashData(data.dashData)
