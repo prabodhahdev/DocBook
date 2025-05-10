@@ -108,7 +108,7 @@ const Login = () => {
     e.preventDefault();
     try {
       if (state === 'Admin') {
-        const { data } = await axios.post('http://localhost:8000/api/admin/login', { email, password });
+        const { data } = await axios.post('https://docbook-backend-cjvu.onrender.com/api/admin/login', { email, password });
         if (data.success) {
           console.log(data.token);
           localStorage.setItem('aToken', data.token);
@@ -127,7 +127,7 @@ const Login = () => {
           toast.error(data.msg);
         }
       } else {
-        const { data } = await axios.post('http://localhost:8000/api/doctor/login', { email, password });
+        const { data } = await axios.post('https://docbook-backend-cjvu.onrender.com/api/doctor/login', { email, password });
         if (data.success) {
           console.log(data.token);
           localStorage.setItem('dToken', data.token);

@@ -20,10 +20,10 @@ const Login = () => {
       let data;
       if (!login) {
         // Register
-        data = await axios.post('http://localhost:8000/api/user/register', { name, email, password })
+        data = await axios.post('https://docbook-backend-cjvu.onrender.com/api/user/register', { name, email, password })
       } else {
         // Login
-        data = await axios.post('http://localhost:8000/api/user/login', { email, password })
+        data = await axios.post('https://docbook-backend-cjvu.onrender.com/api/user/login', { email, password })
       }
 
       if (data.data.success) {

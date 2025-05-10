@@ -100,7 +100,7 @@ const Appointment = () => {
 
       const slotDate = day + "_" + month + "_" + year
       
-      const { data } = await axios.post('http://localhost:8000/api/user/book-appointment',{docId,slotDate,slotTime},{headers :{token} })
+      const { data } = await axios.post('https://docbook-backend-cjvu.onrender.com/api/user/book-appointment',{docId,slotDate,slotTime},{headers :{token} })
       if (data.success) {
         toast.success(data.msg)
         getDoctorsData()
