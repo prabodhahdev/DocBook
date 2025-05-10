@@ -1,5 +1,5 @@
 import validator from 'validator'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs';
 import User from '../models/userModel.js'
 import Doctor from '../models/doctorModel.js'
 import AppointmentModel from '../models/appointmentModel.js'
