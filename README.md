@@ -144,6 +144,5 @@ You can register a new account using the registration form on the website.
 **D.P. Prabodha Harshani**
 Software Engineering Undergraduate
 Sabaragamuwa University of Sri Lanka
-🔗 [LinkedIn]([https://www.linkedin.com/in/prabodha-harshani](https://www.linkedin.com/in/prabodhahdev/))
 
 
